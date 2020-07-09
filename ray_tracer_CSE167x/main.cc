@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// NOTE: The channel layout seems to BGR (not RGB), both empirically and looking
+// NOTE: The channel layout seems to be BGR (not RGB), both empirically and looking
 // at the documentation.
 void SaveDummyImage() {
   FreeImage_Initialise();
@@ -39,8 +39,7 @@ int main(int argc, char **argv) {
   }
 
   cout << "I'd like to read " << argv[1] << endl;
-  readfile(argv[1]);
+  Scene scene = readfile(argv[1]);
 
-  SaveDummyImage();
   exit(0);
 }

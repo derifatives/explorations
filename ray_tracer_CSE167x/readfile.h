@@ -2,7 +2,8 @@
 
 // Scene file reader.
 
+#include "scene.h"
+
 // Reads and returns a scene from 'filename'. On failure, writes an error and
 // exits the program.
-void readfile(const char* filename);
-  
+Scene readfile(const char* filename);

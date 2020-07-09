@@ -8,7 +8,7 @@
 #include <sstream>
 #include <vector>
 
-#include "linalg.h"
+#include "readfile.h"
 
 using namespace std;
 
@@ -42,11 +42,11 @@ v3 readV3(stringstream& s) {
 }
 
 
-void readfile(const char* filename) {
+Scene readfile(const char* filename) {
   ifstream in;
   string line, command;
   in.open(filename);
-  bool parsed_camera(false), parsed_size(false);
+  bool parsed_camera(false), parsed_film(false);
 
   int size_x, size_y;
   v3 eyeinit, upinit, center;
@@ -65,14 +65,14 @@ void readfile(const char* filename) {
     if ((line.find_first_not_of(" \t\r\n") == string::npos) ||
         (line[0] == '#')) {
     } else if (command == "size") {
-      if (parsed_size) {
+      if (parsed_film) {
         cerr << "Trying to parse size twice." << endl;
         exit(-1);
       }
 
       size_x = readInt(s);
       size_y = readInt(s);
-      parsed_size = true;
+      parsed_film = true;
     } else if (command == "camera") {
       if (parsed_camera) {
         cerr << "Trying to parse camera twice." << endl;
@@ -92,5 +92,15 @@ void readfile(const char* filename) {
     getline(in, line);
   }
 
-  return;
+  if (!parsed_camera) {
+    cerr << "No camera parsed." << endl;
+    exit(-1);
+  }
+  if (!parsed_film) {
+    cerr << "No film parsed." << endl;
+    exit(-1);
+  }
+
+  return Scene(Camera(eyeinit, center, upinit),
+               Film(size_x, size_y));
 }
