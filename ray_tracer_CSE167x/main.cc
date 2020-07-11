@@ -38,19 +38,9 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-  cout << "I'd like to read " << argv[1] << endl;
+  cout << "Reading scene from " << argv[1] << "..." << endl;
   Scene scene = readfile(argv[1]);
+  cout << "Done reading scene." << endl;
 
-  m4 e = m4::eye();
-  e.print("Identity");
-
-  m4 M(1., 2., 3., 4.,
-       2., 3., 4., 5.,
-       3., 4., 5., 6.,
-       4., 5., 6., 7.);
-  M.print("M");
-
-  m4 MM = matmul(M, M);
-  MM.print("MM");
   exit(0);
 }

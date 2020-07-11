@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 
+#include "linalg.h"
 #include "readfile.h"
 
 using namespace std;
@@ -22,25 +23,30 @@ int readInt(stringstream& s) {
   return i;
 }
 
-float readFloat(stringstream& s) {
-  float f;
+double readDouble(stringstream& s) {
+  double f;
   s >> f;
   if (s.fail()) {
-    cerr << "Failed to read float " << endl;
+    cerr << "Failed to read double " << endl;
     exit(-1);
   }
   return f;
 }
 
-
 v3 readV3(stringstream& s) {
-  vector<float> fv(3, 0.);
+  vector<double> fv(3, 0.);
   for (int i = 0; i < 3; ++i) {
-    fv[i] = readInt(s);
+    fv[i] = readDouble(s);
   }
   return v3(fv[0], fv[1], fv[2]);
 }
 
+Triangle readTriangle(stringstream& s) {
+  int i1 = readInt(s);
+  int i2 = readInt(s);
+  int i3 = readInt(s);
+  return Triangle(i1, i2, i3);
+}
 
 Scene readfile(const char* filename) {
   ifstream in;
@@ -50,7 +56,33 @@ Scene readfile(const char* filename) {
 
   int size_x, size_y;
   v3 eyeinit, upinit, center;
-  float fovy;
+  double fovy;
+
+  // Initialize materials.
+  v3 ambient(0.2, 0.2, 0.2);
+  v3 diffuse(0., 0., 0.);
+  v3 specular(0., 0., 0.);
+  double shininess(0.);
+  Materials materials(ambient, diffuse, specular, shininess);
+
+  vector<Materials> materials_v;
+  materials_v.push_back(materials);
+  bool materials_changed = false;
+
+  // Initialize transformation.
+  m4 transformation = m4::eye();
+  vector<m4> transformations_v;
+  transformations_v.push_back(transformation);
+  bool transformation_changed = false;
+
+  // Initialize vertices.
+  vector<v3> vertices_v;
+
+  // Initialize triangle group.
+  TriangleGroup triangle_group;
+  vector<TriangleGroup> triangle_groups_v;
+  triangle_groups_v.push_back(triangle_group);
+
 
   if (!in.is_open()) {
     cerr << "Failed to open " << filename << endl;
@@ -82,9 +114,39 @@ Scene readfile(const char* filename) {
       eyeinit = readV3(s);
       center = readV3(s);
       upinit = readV3(s);
-      fovy = readFloat(s);
+      fovy = readDouble(s);
 
       parsed_camera = true;
+    } else if (command == "ambient") {
+      ambient = readV3(s);
+      materials_changed = true;
+    } else if (command == "diffuse") {
+      diffuse = readV3(s);
+      materials_changed = true;
+    } else if (command == "specular") {
+      specular = readV3(s);
+      materials_changed = true;
+    } else if (command == "shininess") {
+      shininess = readDouble(s);
+      materials_changed = true;
+    } else if (command == "vertex") {
+      vertices_v.push_back(readV3(s));
+    } else if (command == "tri") {  // Add sphere here.
+      if (transformation_changed) {
+        transformations_v.push_back(transformation);
+        triangle_groups_v.push_back(triangle_group);
+        triangle_group = TriangleGroup();
+        transformation_changed = false;
+      }
+
+      if (materials_changed) {
+        materials_v.push_back(materials);
+        materials_changed = false;
+      }
+
+      if (command == "tri") {
+        triangle_group.triangles_v.push_back(readTriangle(s));
+      }
     } else {
       cerr << "Skipping unknown command " << command << endl;
     }
@@ -101,6 +163,7 @@ Scene readfile(const char* filename) {
     exit(-1);
   }
 
-  return Scene(Camera(eyeinit, center, upinit),
-               Film(size_x, size_y));
+  return Scene(Camera(eyeinit, center, upinit, fovy),
+               Film(size_x, size_y),
+               materials_v);
 }

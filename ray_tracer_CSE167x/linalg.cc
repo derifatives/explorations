@@ -8,6 +8,17 @@
 
 using namespace std;
 
+v3::v3(double x, double y, double z)
+    : x(x), y(y), z(z) {}
+v3::v3() { x = y = z = 0; }
+
+m3::m3(double m_11, double m_21, double m_31,
+       double m_12, double m_22, double m_32,
+       double m_13, double m_23, double m_33)
+    : m_11(m_11), m_21(m_21), m_31(m_31),
+      m_12(m_12), m_22(m_22), m_32(m_32),
+      m_13(m_13), m_23(m_23), m_33(m_33) {}
+
 v3 matvec(const m3& m, const v3& v) {
   return v3(m.m_11 * v.x + m.m_12 * v.y + m.m_13 * v.z,
             m.m_21 * v.x + m.m_22 * v.y + m.m_23 * v.z,
@@ -17,6 +28,21 @@ v3 matvec(const m3& m, const v3& v) {
 v3 cross(const v3& a, const v3& b) {
   return matvec(m3(0., a.z, -a.y, -a.z, 0, a.x, a.y, -a.x, 0), b);
 }
+
+m4::m4(double m_11, double m_21, double m_31, double m_41,
+       double m_12, double m_22, double m_32, double m_42,
+       double m_13, double m_23, double m_33, double m_43,
+       double m_14, double m_24, double m_34, double m_44)
+    : m_11(m_11), m_21(m_21), m_31(m_31), m_41(m_41),
+      m_12(m_12), m_22(m_22), m_32(m_32), m_42(m_42),
+      m_13(m_13), m_23(m_23), m_33(m_33), m_43(m_43),
+      m_14(m_14), m_24(m_24), m_34(m_34), m_44(m_44) {}
+
+m4::m4(const m3& m3)
+    : m_11(m3.m_11), m_21(m3.m_21), m_31(m3.m_31), m_41(0.),
+      m_12(m3.m_12), m_22(m3.m_22), m_32(m3.m_32), m_42(0.),
+      m_13(m3.m_13), m_23(m3.m_23), m_33(m3.m_33), m_43(0.),
+      m_14(0.), m_24(0.), m_34(0.), m_44(1.) {}
 
 void m4::print(const string& name) {
   cout << "--- " << name << " ---" << endl;

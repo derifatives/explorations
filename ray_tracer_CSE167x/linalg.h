@@ -2,27 +2,26 @@
 
 // Linear algebra helper classes.
 
+#ifndef LINALG_H
+#define LINALG_H
+
 #include <string>
 
 struct v3 {
-  v3(float x, float y, float z)
-      : x(x), y(y), z(z) {}
-  v3() { x = y = z = 0; }  
+  v3(double x, double y, double);
+  v3();
   
-  float x, y, z;
+  double x, y, z;
 };  // struct v3
 
 struct m3 {
-  m3(float m_11, float m_21, float m_31,
-     float m_12, float m_22, float m_32,
-     float m_13, float m_23, float m_33) :
-  m_11(m_11), m_21(m_21), m_31(m_31),
-      m_12(m_12), m_22(m_22), m_32(m_32),
-      m_13(m_13), m_23(m_23), m_33(m_33) {}
+  m3(double m_11, double m_21, double m_31,
+     double m_12, double m_22, double m_32,
+     double m_13, double m_23, double m_33);
 
-  float m_11, m_21, m_31;
-  float m_12, m_22, m_32;
-  float m_13, m_23, m_33;
+  double m_11, m_21, m_31;
+  double m_12, m_22, m_32;
+  double m_13, m_23, m_33;
 };  // struct m3
 
 v3 matvec(const m3& m, const v3& v);
@@ -30,15 +29,16 @@ v3 matvec(const m3& m, const v3& v);
 v3 cross(const v3& a, const v3& b);
 
 struct m4 {
- m4(float m_11, float m_21, float m_31, float m_41,
-    float m_12, float m_22, float m_32, float m_42,
-    float m_13, float m_23, float m_33, float m_43,
-    float m_14, float m_24, float m_34, float m_44) :
-  m_11(m_11), m_21(m_21), m_31(m_31), m_41(m_41),
-      m_12(m_12), m_22(m_22), m_32(m_32), m_42(m_42),
-      m_13(m_13), m_23(m_23), m_33(m_33), m_43(m_43),
-      m_14(m_14), m_24(m_24), m_34(m_34), m_44(m_44) {}
+ m4(double m_11, double m_21, double m_31, double m_41,
+    double m_12, double m_22, double m_32, double m_42,
+    double m_13, double m_23, double m_33, double m_43,
+    double m_14, double m_24, double m_34, double m_44);
 
+  // Build an m4 from an m3 by putting the m3 in the upper-left 3-by-3
+  // submatrix, a 1 in the lower right, and zeros along the rest of the last row
+  // and column.
+  m4(const m3& m3);
+  
   static m4 eye() {
     return m4(1., 0., 0., 0.,
               0., 1., 0., 0.,
@@ -48,11 +48,12 @@ struct m4 {
 
   void print(const std::string& name);
 
-  float m_11, m_21, m_31, m_41;
-  float m_12, m_22, m_32, m_42;
-  float m_13, m_23, m_33, m_43;
-  float m_14, m_24, m_34, m_44;
+  double m_11, m_21, m_31, m_41;
+  double m_12, m_22, m_32, m_42;
+  double m_13, m_23, m_33, m_43;
+  double m_14, m_24, m_34, m_44;
 };  // struct m4
 
 m4 matmul(const m4& m1, const m4& m2);
-      
+
+# endif  // LINALG_H
