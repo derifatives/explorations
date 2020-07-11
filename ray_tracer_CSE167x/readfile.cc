@@ -53,7 +53,7 @@ Scene readfile(const char* filename) {
   float fovy;
 
   if (!in.is_open()) {
-    cerr << "Failed to open " << filename;
+    cerr << "Failed to open " << filename << endl;
     exit(-1);
   }
 
@@ -86,7 +86,7 @@ Scene readfile(const char* filename) {
 
       parsed_camera = true;
     } else {
-      cout << "Skipping unknown command " << command << endl;
+      cerr << "Skipping unknown command " << command << endl;
     }
 
     getline(in, line);
