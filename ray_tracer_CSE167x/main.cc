@@ -38,9 +38,10 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-  cout << "Reading scene from " << argv[1] << "..." << endl;
-  Scene scene = readfile(argv[1]);
-  cout << "Done reading scene." << endl;
+  // cout << "Reading scene from " << argv[1] << "..." << endl;
+  // Scene scene = readfile(argv[1]);
+  //cout << "Done reading scene." << endl;
+
 
   exit(0);
 }

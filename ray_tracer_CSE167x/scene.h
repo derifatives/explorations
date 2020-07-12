@@ -54,20 +54,20 @@ struct Scene {
        vector<Materials> materials_v,
        vector<v3> vertices_v,
        vector<m4> transformations_v,
-       vector<TriangleGroup> triangle_group_v)
+       vector<TriangleGroup> triangle_groups_v)
      : camera(camera),
       film(film),
       materials_v(materials_v),
       vertices_v(vertices_v),
       transformations_v(transformations_v),
-      triangle_group_v(triangle_group_v) {} 
+      triangle_groups_v(triangle_groups_v) {} 
   
   Camera camera;
   Film film;
   vector<Materials> materials_v;
   vector<v3> vertices_v;
   vector<m4> transformations_v;
-  vector<TriangleGroup> triangle_group_v;
+  vector<TriangleGroup> triangle_groups_v;
   // vector<Sphere> sphere_v;
 };  // struct Scene
 

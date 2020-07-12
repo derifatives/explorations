@@ -165,5 +165,8 @@ Scene readfile(const char* filename) {
 
   return Scene(Camera(eyeinit, center, upinit, fovy),
                Film(size_x, size_y),
-               materials_v);
+               materials_v,
+               vertices_v,
+               transformations_v,
+               triangle_groups_v);
 }
