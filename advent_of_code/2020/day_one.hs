@@ -28,12 +28,12 @@ findPairThatSumsToHelper [] _ _ = []
 findPairThatSumsToHelper _ [] _ = []
 findPairThatSumsToHelper up down t =
   let low = head up
-  in let high = head down
+      high = head down
   in if low + high == t
      then [low, high]
-     else (if (low + high) >= t
-            then (findPairThatSumsToHelper up (tail down) t)
-            else findPairThatSumsToHelper (tail up) down t)
+     else if (low + high) >= t
+          then findPairThatSumsToHelper up (tail down) t
+          else findPairThatSumsToHelper (tail up) down t
 
 findTripleThatSumsTo :: [Int] -> Int -> [Int]
 findTripleThatSumsTo xs t = findTripleThatSumsToHelper xs (reverse xs) t
