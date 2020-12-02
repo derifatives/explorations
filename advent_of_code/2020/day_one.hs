@@ -7,17 +7,13 @@ makeInteger = read
 main = do
    args <- getArgs
    content <- readFile (args !! 0)
-
-   let total = (read $ (args !! 1))
-   let linesOfFiles = lines content
-   let ints = sort $ map makeInteger linesOfFiles
-
-   let pair = findPairThatSumsTo ints total
+   let ints = sort $ map makeInteger $ lines content
+       total = read $ (args !! 1)
+       pair = findPairThatSumsTo ints total
+       triple = findTripleThatSumsTo ints total
+       
    mapM_ putStrLn $ generateOutput "Pair" total pair
-
    putStrLn ""
-   
-   let triple = findTripleThatSumsTo ints total
    mapM_ putStrLn $ generateOutput "Triple" total triple
    
 findPairThatSumsTo :: [Int] -> Int -> [Int]
