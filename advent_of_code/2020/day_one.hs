@@ -9,38 +9,40 @@ main = do
    content <- readFile (args !! 0)
    let ints = sort $ map makeInteger $ lines content
        total = read $ (args !! 1)
-       pair = findPairThatSumsTo ints total
-       triple = findTripleThatSumsTo ints total
-       
-   mapM_ putStrLn $ generateOutput "Pair" total pair
+       pairs = pairsWithSum ints total
+       triples = triplesWithSum ints total
+
    putStrLn ""
-   mapM_ putStrLn $ generateOutput "Triple" total triple
+   putStrLn $ "All Pairs: " ++ (show pairs)
+   putStrLn $ "All Triples: " ++ (show triples)
    
-findPairThatSumsTo :: [Int] -> Int -> [Int]
-findPairThatSumsTo xs t = findPairThatSumsToHelper xs (reverse xs) t
+   mapM_ putStrLn $ generateOutput "Pair" total (head pairs)
+   putStrLn ""
+   mapM_ putStrLn $ generateOutput "Triple" total (head triples)
+   
+pairsWithSum :: [Int] -> Int -> [[Int]]
+pairsWithSum xs t = pairsWithSumHelper xs (reverse xs) t
 
-findPairThatSumsToHelper :: [Int] -> [Int] -> Int -> [Int]
-findPairThatSumsToHelper [] _ _ = []
-findPairThatSumsToHelper _ [] _ = []
-findPairThatSumsToHelper up@(low:up_rest) down@(high:down_rest) t =
+pairsWithSumHelper :: [Int] -> [Int] -> Int -> [[Int]]
+pairsWithSumHelper [] _ _ = []
+pairsWithSumHelper _ [] _ = []
+pairsWithSumHelper up@(low:up_rest) down@(high:down_rest) t =
   if low + high == t
-  then [low, high]
+  then [low, high]:pairsWithSumHelper up_rest down_rest t
   else if (low + high) >= t
-       then findPairThatSumsToHelper up down_rest t
-       else findPairThatSumsToHelper up_rest down t
+       then pairsWithSumHelper up down_rest t
+       else pairsWithSumHelper up_rest down t
 
-findTripleThatSumsTo :: [Int] -> Int -> [Int]
-findTripleThatSumsTo xs t = findTripleThatSumsToHelper xs (reverse xs) t
+triplesWithSum :: [Int] -> Int -> [[Int]]
+triplesWithSum xs t = triplesWithSumHelper xs (reverse xs) t
 
-findTripleThatSumsToHelper :: [Int] -> [Int] -> Int -> [Int]
-findTripleThatSumsToHelper [] _ _ = []
-findTripleThatSumsToHelper _ [] _ = []
-findTripleThatSumsToHelper up@(low:up_rest) down t =
-  let pair = findPairThatSumsToHelper up_rest down (t - low)
-  in if null pair
-     then findTripleThatSumsToHelper up_rest down t
-     else low:pair
-             
+triplesWithSumHelper :: [Int] -> [Int] -> Int -> [[Int]]
+triplesWithSumHelper [] _ _ = []
+triplesWithSumHelper _ [] _ = []
+triplesWithSumHelper up@(low:up_rest) down t =
+  let pairs = pairsWithSumHelper up_rest down (t - low)
+  in (map (\p -> low:p) pairs) ++ triplesWithSumHelper up_rest down t
+     
 generateOutput :: String -> Int -> [Int] -> [String]
 generateOutput name total elts = [
   "---- " ++ name ++ " Summing To " ++ (show total) ++ " ----",
