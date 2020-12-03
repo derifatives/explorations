@@ -22,14 +22,12 @@ findPairThatSumsTo xs t = findPairThatSumsToHelper xs (reverse xs) t
 findPairThatSumsToHelper :: [Int] -> [Int] -> Int -> [Int]
 findPairThatSumsToHelper [] _ _ = []
 findPairThatSumsToHelper _ [] _ = []
-findPairThatSumsToHelper up down t =
-  let low = head up
-      high = head down
-  in if low + high == t
-     then [low, high]
-     else if (low + high) >= t
-          then findPairThatSumsToHelper up (tail down) t
-          else findPairThatSumsToHelper (tail up) down t
+findPairThatSumsToHelper up@(low:up_rest) down@(high:down_rest) t =
+  if low + high == t
+  then [low, high]
+  else if (low + high) >= t
+       then findPairThatSumsToHelper up down_rest t
+       else findPairThatSumsToHelper up_rest down t
 
 findTripleThatSumsTo :: [Int] -> Int -> [Int]
 findTripleThatSumsTo xs t = findTripleThatSumsToHelper xs (reverse xs) t
@@ -37,12 +35,11 @@ findTripleThatSumsTo xs t = findTripleThatSumsToHelper xs (reverse xs) t
 findTripleThatSumsToHelper :: [Int] -> [Int] -> Int -> [Int]
 findTripleThatSumsToHelper [] _ _ = []
 findTripleThatSumsToHelper _ [] _ = []
-findTripleThatSumsToHelper up down t =
-  let first = head up
-  in let pair = findPairThatSumsToHelper (tail up) down (t - first)
-     in if null pair
-        then findTripleThatSumsToHelper (tail up) down t
-        else first:pair
+findTripleThatSumsToHelper up@(low:up_rest) down t =
+  let pair = findPairThatSumsToHelper up_rest down (t - low)
+  in if null pair
+     then findTripleThatSumsToHelper up_rest down t
+     else low:pair
              
 generateOutput :: String -> Int -> [Int] -> [String]
 generateOutput name total elts = [
