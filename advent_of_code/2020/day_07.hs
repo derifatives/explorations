@@ -6,15 +6,11 @@ main = do
   content <- readFile (args !! 0)
 
   let remove_words = ["bag", "bags", "bag,", "bags,", "bag.", "bags.", "no", "other", "contain"]
-  let colors_and_numbers = map ((filter (\l -> not (elem l remove_words))) . words) (lines content)
-  let parsed_colors_and_numbers = map parseColors colors_and_numbers
-  let parsed_colors = map (\can->(fst can, map snd (snd can))) parsed_colors_and_numbers
-  let graph = buildMap parsed_colors
+      colors_and_numbers = map ((filter (\l -> not (elem l remove_words))) . words) (lines content)
+      parsed_colors_and_numbers = map parseColors colors_and_numbers
+      parsed_colors = map (\can->(fst can, map snd (snd can))) parsed_colors_and_numbers
+      graph = buildMap parsed_colors
   
-  -- putStrLn $ show (take 10 parsed_colors)
-  --  (take 10 (Map.toList (buildMap parsed_colors)))
-  -- putStrLn $ show (Map.lookup  "shiny gold" graph)
-  -- putStrLn $ show (Map.lookup  "light fuschia" graph)
   putStrLn $ "Colors that could contain 'shiny gold': " ++ show (length (search graph "shiny gold"))
   putStrLn $ "Number of bags in a 'shiny gold': " ++ show ((countBags (Map.fromList parsed_colors_and_numbers) "shiny gold") - 1)
 
@@ -49,7 +45,7 @@ search' graph (found, queue@(q1:qr)) =
   else let newfound = (Map.findWithDefault [] q1 graph)
        in search' graph (q1:found, qr ++ newfound)
 
--- Nonworking depth first search.
+-- Non-working depth first search.
 -- search' :: Map.Map String [String] -> String -> [String] -> [String]
 -- search' graph key already_found =
 --   foldr (\c af -> if elem c af then af else search' graph c (c:already_found)) already_found (Map.findWithDefault [] key graph)
