@@ -31,3 +31,7 @@ executable day_08
   main-is:             day_08.hs
   build-depends:       base >=4.13 && <4.14, containers, split, vector
   default-language:    Haskell2010
+
+executable day_09
+  main-is:             day_09.hs
+  build-depends:       base >=4.13 && <4.14, containers
