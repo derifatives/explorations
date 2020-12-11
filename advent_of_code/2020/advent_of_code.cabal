@@ -35,3 +35,7 @@ executable day_08
 executable day_09
   main-is:             day_09.hs
   build-depends:       base >=4.13 && <4.14, containers
+
+executable day_10
+  main-is:             day_10.hs
+  build-depends:       base >=4.13 && <4.14, containers
