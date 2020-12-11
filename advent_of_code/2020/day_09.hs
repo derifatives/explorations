@@ -7,7 +7,7 @@ main = do
   args <- getArgs
   content <- readFile (args !! 0)
 
-  let ns = map (\l -> read l :: Int) (lines content)
+  let ns = map read (lines content)
       pn = 25
       slices l = (p, head r):(slices (tail l)) where (p, r) = splitAt pn l
       f = \(p, n) -> null [(x,y) | x<-p, y<-p, x+y==n, x /= y]
