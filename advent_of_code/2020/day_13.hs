@@ -14,14 +14,14 @@ main = do
       bus_ids = map fst ids_and_rs
       bus_wait_time bus_id = (bus_id - (timestamp `mod` bus_id)) `mod` bus_id
       first_bus = minimumBy (comparing fst) (zip (map bus_wait_time bus_ids) bus_ids)
-      mod_ids_and_rs = map (\(i, r) -> (toInteger i, toInteger ((i - (r `mod` i)) `mod` i))) ids_and_rs
+      -- mod_ids_and_rs = map (\(i, r) -> (toInteger i, toInteger ((i - (r `mod` i)) `mod` i))) ids_and_rs
+      mod_ids_and_rs = map (\(i, r) -> (toInteger i, toInteger ((-r) `mod` i))) ids_and_rs
       new_timestamp = foldr1 crt2 mod_ids_and_rs
   
   putStrLn $ "Bus times: " ++ (show first_bus) ++ ", Product: " ++ (show ((uncurry (*)) first_bus))
-  putStrLn $ "timestamp = " ++ (show new_timestamp)
+  putStrLn $ "Timestamp = " ++ (show new_timestamp)
   putStrLn $ (show ids_and_rs)
   putStrLn $ (show mod_ids_and_rs)
-  
 
 extended_euclid :: Integral a => a -> a -> (a, a, a)
 extended_euclid x y
