@@ -51,4 +51,9 @@ executable day_12
 executable day_13
   main-is:             day_13.hs
   build-depends:       base >=4.13 && <4.14, split
+
+executable day_14
+  main-is:             day_14.hs
+  build-depends:       base >=4.13 && <4.14, containers, split
+  
   
