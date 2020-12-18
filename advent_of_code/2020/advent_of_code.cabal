@@ -58,6 +58,10 @@ executable day_14
   
 executable day_15
   main-is:             day_15.hs
-  build-depends:       base >=4.13 && <4.14, containers, split
-  
+  build-depends:       base >=4.13 && <4.14, containers
+
+executable day_16
+  main-is:             day_16.hs
+  build-depends:       base >=4.13 && <4.14, containers, parsec, split
+ 
   
