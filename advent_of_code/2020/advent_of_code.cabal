@@ -67,5 +67,10 @@ executable day_16
 executable day_17
   main-is:             day_17.hs
   build-depends:       base >=4.13 && <4.14, containers
- 
+
+executable day_18
+  main-is:             day_18.hs
+  build-depends:       base >=4.13 && <4.14
+
+   
   
