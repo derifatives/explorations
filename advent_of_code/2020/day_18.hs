@@ -55,9 +55,6 @@ evalFormula2' st@(St Nothing Nothing ('(':rest)) =
 evalFormula2' st@(St (Just prev) (Just Plus) ('(':rest)) = 
   let st@(St (Just subval) Nothing cont) = evalFormula2' (St Nothing Nothing rest) in
     evalFormula2' (St (Just (prev + subval)) Nothing cont)
-evalFormula2' st@(St (Just prev) (Just Times) ('(':rest)) = 
-  let st@(St (Just subval) Nothing cont) = evalFormula2' (St Nothing Nothing ('(':rest)) in
-    St (Just (prev * subval)) Nothing cont
 evalFormula2' st@(St (Just val) Nothing (')':rest)) = St (Just val) Nothing rest
 evalFormula2' st@(St Nothing Nothing (c:rest)) =
   evalFormula2' (St (Just (digitToInt c)) Nothing rest)
