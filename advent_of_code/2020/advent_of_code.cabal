@@ -74,7 +74,7 @@ executable day_18
 
 executable day_19
   main-is:             day_19.hs
-  build-depends:       base >=4.13 && <4.14, containers, split
+  build-depends:       base >=4.13 && <4.14, containers, split, Unique
 
    
   
