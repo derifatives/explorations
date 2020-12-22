@@ -84,5 +84,9 @@ executable day_21
   main-is:             day_21.hs
   build-depends:       base >=4.13 && <4.14, containers, split, sort
 
+executable day_22
+  main-is:             day_22.hs
+  build-depends:       base >=4.13 && <4.14, containers, split
+
     
   
