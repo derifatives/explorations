@@ -24,10 +24,10 @@ data Inst = Acc Int | Jmp Int | Nop Int deriving (Show)
 data State = State (S.Set Int) Int Int deriving (Show)
 
 getAcc :: State -> Int
-getAcc s@(State _ _ a) = a
+getAcc (State _ _ a) = a
 
 getPtr :: State -> Int
-getPtr s@(State _ p _) = p
+getPtr (State _ p _) = p
 
 parseInst :: [String] -> Inst
 parseInst (i:ns:[]) =
@@ -44,13 +44,13 @@ class Puter p where
 
 data BasicPuter = BP (V.Vector Inst)
 instance Puter BasicPuter where
-  size bp@(BP v) = length v
-  getInst bp@(BP v) i = v V.! i
+  size (BP v) = length v
+  getInst (BP v) i = v V.! i
 
 data OverlayPuter = OP (V.Vector Inst) Int
 instance Puter OverlayPuter where
-  size bp@(OP v o) = length v
-  getInst bp@(OP v o) i =
+  size (OP v o) = length v
+  getInst (OP v o) i =
     let original_inst = v V.! i
     in if (i /= o)
        then original_inst
