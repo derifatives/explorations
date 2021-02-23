@@ -1,0 +1,120 @@
+\title{Assignment 0, Written}
+\author{Rif A. Saurous}
+\date{\today}
+
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{mathtools}
+\usepackage{amsmath}
+
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2}]}{\end{trivlist}}
+
+\begin{document}
+\maketitle
+
+\begin{exercise}{2.1, Euler's Polyhedral Formula.} We want to show that for any polygonal disk,
+  $$V - E + F = 1.$$
+  The proof is by induction. The base case(s) are a loop of $V$ vertices, $E$ edges, and a single face; the formula holds trivially in this case.
+
+  For the induction step, we'll proceed semi-informally (we'd formalize it as a double-induction on $V$ and $E$ simultaneously), and consider four cases:
+  \begin{itemize}
+  \item{Removing an interior edge: $V$ remains constant and $E$ and $F$ are both decreased by 1.}
+  \item{Removing an interior vertex of degree $d$ and its associated edges: $V$ is decreased by 1, $E$ is decreased by $d$, and $F$ is decreased by $d-1$.}
+  \item{Replacing a vertex of degree 2 and its two edges with a single edge: $V$ and $E$ each decrease by 1, $F$ remains constant.}
+  \item{Removing an exterior vertex of degree $d$ and its associated edges: again $V$ is decreased by 1, $E$ is decreased by $d$, and $F$ is decreased by $d-1$.}
+  \end{itemize}
+
+  In all cases, as we move from more complex to less complex structures, the invariant is maintained.
+\end{exercise}
+
+\begin{exercise}{2.2, Platonic Solids.}
+  By the Euler-Poincar\'{e} formula,
+  $$V - E + F = 2.$$
+  Suppose each face has $f$ edges on its boundary. Since each edge appears on two boundaries, we have $fF = 2E$. Similarly, if each edge has degree $d$, we have $dV = 2E$. Substituting,
+  $$\frac{2E}{d} - E + \frac{2E}{f} = 2.$$
+  Dividing both side by $2E$ and rearranging,
+  $$\frac{1}{d} + \frac{1}{f} = \frac{1}{2} + \frac{1}{E}$$,
+  and noting that we must have $E > 0$, we see that $d$ and $f$ must satisfy
+  $$\frac{1}{d} + \frac{1}{f} > \frac{1}{2}$$.
+  Adding in the obvious but not obvious-how-to-justify requirements that $d$ and $f$ are both at least 3, we enumerate all possible solutions (and the resulting platonic solid, although we don't show it's constructable):
+  \begin{itemize}
+  \item{$d = f = 3$ (tetrahedron)}
+  \item{$d = 4, f = 3$, (octahedron)}
+  \item{$d = 3, f = 4$, (cube)}
+  \item{$d = 5, f = 3$, (icosahedron)}
+  \item{$d = 3, f = 5$, (dodecahedron)}
+  \end{itemize}
+  We note that once $d$ and $f$ are specified, we can easily obtain $V$, $E$ and $F$ through substitution into Euler--Poincar\'{e}. We also note that we've proved these are the only possibilities, but we haven't actually shown the solids are constructable.
+\end{exercise}
+
+\begin{exercise}{2.3, Regular Valence.}
+  A simplicial surface by definition has 3 edges per face, and if all vertices are regular, each vertex has degree 6, so the surface satisfies $2E = 6V = 3F$. Substituting into Euler-Poincar\'{e},
+  $$\frac{E}{3} - E + \frac{2E}{3} = 2 - 2g.$$
+  The three terms on the left side sum to zero for any $E$, so any possible solution must set $g = 1$ to force the right side to zero.
+\end{exercise}
+
+\begin{exercise}{2.4, Minimum Irregular Valence.}
+  Remembering that our simplifical surface by definition satisfies $F = \frac{2E}{3}$, we immediately simplify Euler-Poincar\'{e} to
+  $$V - \frac{E}{3} = 2 - 2g.$$
+  Next, defining $R$ and $I$ to be respectively the number of regular (degree 6) and irregular (having average degree $d_i$) nodes, we have:
+  \begin{eqnarray*}
+    V & = & R + I \\
+    2E & = & 6R + d_iI \\
+  \end{eqnarray*},
+  where the latter can be easily manipulated into $\frac{E}{3} = R + \frac{d_i}{6} I$, yielding
+  $$V - \frac{E}{3} = (R + I) - (R + \frac{d_i}{6} I) = (1 - \frac{d_i}{6})I = 2 - 2g$$,
+  which lets us express $I$ (assuming $d_i \neq 6$) as
+  $$I = \frac{12(1-g)}{6-d_i}.$$
+
+  We now turn specifically to the $g=0$ case:
+  $$I = \frac{12}{6 - d_i}.$$
+  We see that $I$ is increasing in $d_i$, so to minimize $I$, we choose $d_i$ as small as possible. However, {\em every} vertex must have degree at least 3, so $d_i$, the average degree of the irregular vertices, must be at least 3. Therefore the minimal $I$ is obtained by choosing $d_i = 3$, which yields $I=4.$ (In this case, the resulting surface is a tetrahedron.)
+
+  The $g=1$ case was covered in the previous exercise.
+
+  For $g > 1$, we have:
+  $$I = \frac{-12k}{6-d_i}$$
+  for some positive integer k. To make $I$ a positive integer, we must choose $d_i = 6$. By choosing $d_i = 12k + 6$, we can (according to Euler-Poincar\'{e}, I don't have an explicit construction) achieve $I = 1$.
+\end{exercise}
+
+\begin{exercise}{2.5, Mean Valence (Triangle Mesh).}
+  As we've explored in the last two exercises, for a triangle mesh, Euler-Poincar\'{e} simplifies to $V - \frac{E}{3} = c$ for some constant $c$ depending on the genus. It's easy to see this implies that as $V \rightarrow \infty, E \rightarrow 3V$. Since the valence $d$ satisfies $d V = 2E$, this implies $d \rightarrow 6$. More prosaically, each time we add a vertex, we are adding 3 edges and 2 faces (we're splitting one face into 3.
+\end{exercise}
+
+\begin{exercise}{2.6, Mean Valence (Quad Mesh).}
+  For a quad mesh, we have $2E = 4F$, so Euler-Poincar\'{e} simplifies to $V - \frac{E}{2} = c$. Therefore, as $V \rightarrow \infty, E \rightarrow 2V$, and $d \rightarrow 4$. Thinking about manually increasing $V$, I don't see how to add a single vertex $V$, but it's easy to see how to add a new quad ``inside'' an existing quad, which would add 4 vertices, 8 edges, and and 4 faces, implying a limiting ratio of $1:2:1$.
+\end{exercise}
+
+\begin{exercise}{2.7, Mean Valence (Tetrahedral).}
+  By the ``argument from internal placing'', we obtain a ratio of $1:4:6:3$. This doesn't seem to match the chart at all.
+
+  If we instead take the advice from the article that the link of every vertex is an icosahedron, then each vertex has degree 12, which means that $V:E = 1:6$, each vertex is part of 20 tetrahedra each of which is touched by four vertices, so $V:T = 1:5$, and each tetreaheron has 4 faces each of which is in two tetrahedra, so $F:T = 2:1$; overall this gives us $V:E:F:T = 1:6:10:5$, which seems roughly right. But I'm highly unclear why the ink of every vertex should be an icosahedron.
+\end{exercise}
+
+\begin{exercise}{2.8, Star, Closure and Link.}
+\end{exercise}
+
+\begin{exercise}{2.9, Boundary and Interior.}
+\end{exercise}
+
+\begin{exercise}{2.10, Surface as Permutation.}
+\end{exercise}
+
+\begin{exercise}{2.11, Permutation as Surface.}
+\end{exercise}
+
+\begin{exercise}{2.12, Surface as Matrices.}
+\end{exercise}
+
+\begin{exercise}{2.13, Classification of Simplicial 1-Manifolds.}
+\end{exercise}
+
+\begin{exercise}{2.14, Boundary Loops.}
+\end{exercise}
+
+\begin{exercise}{2.15, Boundary Has No Boundary.}
+\end{exercise}
+
+\end{document}
